@@ -40,8 +40,7 @@ extension MainCollectionViewModel: MainCollectionViewModelInput {
             do {
                 let request = SearchRequest(keyword: "", max: 20)
                 let response = try await apiClient.call(with: request)
-                let items = response.item.map { MainCollectionViewController.Item.item(MainCollectionCell.Configuration(title: $0.name, imageURL: $0.image)) }
-                sectionsSubject.send([(.item, items)])
+                sectionsSubject.send(MainCollectionTranslator().translate(response))
             } catch {
                 print(error)
             }
