@@ -13,6 +13,7 @@
 		A58EA31929A8A6B700A62922 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A58EA31729A8A6B700A62922 /* Main.storyboard */; };
 		A58EA31B29A8A6B900A62922 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A58EA31A29A8A6B900A62922 /* Assets.xcassets */; };
 		A58EA31E29A8A6B900A62922 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A58EA31C29A8A6B900A62922 /* LaunchScreen.storyboard */; };
+		A58EA32729A8A8C900A62922 /* AppFeature in Frameworks */ = {isa = PBXBuildFile; productRef = A58EA32629A8A8C900A62922 /* AppFeature */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +32,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A58EA32729A8A8C900A62922 /* AppFeature in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -42,6 +44,7 @@
 			children = (
 				A58EA31029A8A6B700A62922 /* App */,
 				A58EA30F29A8A6B700A62922 /* Products */,
+				A58EA32529A8A8C900A62922 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -67,6 +70,13 @@
 			path = App;
 			sourceTree = "<group>";
 		};
+		A58EA32529A8A8C900A62922 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -83,6 +93,9 @@
 			dependencies = (
 			);
 			name = App;
+			packageProductDependencies = (
+				A58EA32629A8A8C900A62922 /* AppFeature */,
+			);
 			productName = App;
 			productReference = A58EA30E29A8A6B700A62922 /* App.app */;
 			productType = "com.apple.product-type.application";
@@ -356,6 +369,13 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A58EA32629A8A8C900A62922 /* AppFeature */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = AppFeature;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A58EA30629A8A6B700A62922 /* Project object */;
 }
