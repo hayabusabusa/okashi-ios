@@ -5,6 +5,7 @@
 //  Created by Shunya Yamada on 2023/02/24.
 //
 
+import Combine
 import UIKit
 import Shared
 
@@ -26,9 +27,15 @@ final class MainCollectionViewController: UIViewController {
         }
     }()
 
+    private let viewModel: MainCollectionViewModelable = MainCollectionViewModel()
+    private var subscriptions = Set<AnyCancellable>()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         configureSubviews()
+        configureSubscriptions()
+
+        viewModel.input.viewDidLoad()
     }
 }
 
@@ -47,10 +54,32 @@ private extension MainCollectionViewController {
         ])
     }
 
+    func configureSubscriptions() {
+        viewModel.output.sections
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] sections in
+                self?.applySnapshot(with: sections)
+            }
+            .store(in: &subscriptions)
+    }
+
     func makeCollectionViewLayout() -> UICollectionViewCompositionalLayout {
         UICollectionViewCompositionalLayout { [weak self] section, _ in
             self?.dataSource.snapshot().sectionIdentifiers[section].layout
         }
+    }
+}
+
+// MARK: - Private
+
+private extension MainCollectionViewController {
+    func applySnapshot(with sections: [(Section, [Item])]) {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
+        sections.forEach { (section, items) in
+            snapshot.appendSections([section])
+            snapshot.appendItems(items, toSection: section)
+        }
+        dataSource.apply(snapshot)
     }
 }
 
