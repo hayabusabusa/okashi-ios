@@ -22,8 +22,10 @@ public struct Okashi: Decodable {
 
 public extension Okashi {
     struct Item: Decodable {
-        public let id, name, kana, maker: String
-        public let price: String
+        public let id, name: String
+        public let kana: SafeDecoding<String>
+        public let maker: SafeDecoding<String>
+        public let price: SafeDecoding<String>
         public let type: String
         public let url: String
         public let tags: Tags?
@@ -33,9 +35,9 @@ public extension Okashi {
 
         public init(id: String,
                     name: String,
-                    kana: String,
-                    maker: String,
-                    price: String,
+                    kana: SafeDecoding<String>,
+                    maker: SafeDecoding<String>,
+                    price: SafeDecoding<String>,
                     type: String,
                     url: String,
                     tags: Tags,
@@ -61,8 +63,23 @@ public extension Okashi.Item {
     struct Tags: Decodable {
         public let tag: [String]
 
+        private enum CodingKeys: CodingKey {
+            case tag
+        }
+
         public init(tag: [String]) {
             self.tag = tag
+        }
+
+        public init(from decoder: Decoder) throws {
+            let container: KeyedDecodingContainer<CodingKeys> = try decoder.container(keyedBy: CodingKeys.self)
+
+            // String で返ってくることもあるので、String も許容する
+            if let string = try? container.decode(String.self, forKey: .tag) {
+                self.tag = [string]
+            } else {
+                self.tag = try container.decode([String].self, forKey: .tag)
+            }
         }
     }
 }

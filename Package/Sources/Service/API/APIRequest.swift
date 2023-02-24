@@ -32,12 +32,11 @@ public extension APIRequest {
     }
 
     func makeURLRequest() throws -> URLRequest {
-        guard let url = URL(string: baseURL) else {
+        guard let url = URL(string: baseURL + path) else {
             throw APIError.invalidURL
         }
 
-        var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
-        components?.path = path
+        var components = URLComponents(url: url, resolvingAgainstBaseURL: false)
         components?.queryItems = parameters.map { URLQueryItem(name: $0.key, value: $0.value) }
 
         guard let resolvedURL = components?.url else {

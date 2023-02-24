@@ -20,6 +20,7 @@ public struct SearchRequest: APIRequest {
     public var parameters: [String : String] {
         var params = [
             "apikey": "guest",
+            "format": "json",
             "keyword": keyword
         ]
 
