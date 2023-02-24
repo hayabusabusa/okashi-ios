@@ -5,6 +5,7 @@
 //  Created by Shunya Yamada on 2023/02/24.
 //
 
+import Nuke
 import UIKit
 
 final class MainCollectionCell: UICollectionViewCell {
@@ -16,7 +17,10 @@ final class MainCollectionCell: UICollectionViewCell {
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
         imageView.backgroundColor = .systemGray6
+        imageView.layer.borderWidth = 1
+        imageView.layer.borderColor = UIColor.systemGray6.cgColor
         imageView.layer.cornerRadius = 4
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
@@ -31,7 +35,9 @@ final class MainCollectionCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(with configuration: Configuration) {}
+    func configure(with configuration: Configuration) {
+        loadImage(for: configuration.imageURL)
+    }
 }
 
 private extension MainCollectionCell {
@@ -44,5 +50,18 @@ private extension MainCollectionCell {
             imageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
             imageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8)
         ])
+    }
+
+    func loadImage(for imageURL: String?) {
+        guard let imageURL,
+              let url = URL(string: imageURL) else { return }
+        Task {
+            do {
+                let response = try await ImagePipeline.shared.image(for: url)
+                imageView.image = response.image
+            } catch {
+                print(error)
+            }
+        }
     }
 }

@@ -11,12 +11,15 @@ let package = Package(
             name: "AppFeature",
             targets: ["AppFeature"]),
     ],
-    dependencies: [],
+    dependencies: [
+        .package(url: "https://github.com/kean/Nuke.git", .upToNextMajor(from: "11.6.4"))
+    ],
     targets: [
         .target(name: "AppFeature",
                 dependencies: [
                     "Service",
-                    "Shared"
+                    "Shared",
+                    .product(name: "Nuke", package: "Nuke")
                 ],
                 path: "./Sources/Features/AppFeature"),
         .target(name: "Service",
