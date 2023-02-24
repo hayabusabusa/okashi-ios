@@ -10,12 +10,13 @@ import Shared
 
 extension MainCollectionViewController {
     enum Item: DiffableItem {
-        case item
+        case item(MainCollectionCell.Configuration)
 
         func cell(for collectionView: UICollectionView, at indexPath: IndexPath, with viewController: UIViewController) -> UICollectionViewCell {
             switch self {
-            case .item:
+            case .item(let configuration):
                 let cell = collectionView.dequeueReusableCell(MainCollectionCell.self, for: indexPath)
+                cell.configure(with: configuration)
                 return cell
             }
         }

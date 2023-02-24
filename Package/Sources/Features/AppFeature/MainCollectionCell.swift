@@ -8,6 +8,10 @@
 import UIKit
 
 final class MainCollectionCell: UICollectionViewCell {
+    struct Configuration: Hashable {
+        let title: String
+        let imageURL: String?
+    }
 
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
@@ -26,6 +30,8 @@ final class MainCollectionCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    func configure(with configuration: Configuration) {}
 }
 
 private extension MainCollectionCell {

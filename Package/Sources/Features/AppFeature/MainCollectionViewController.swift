@@ -29,7 +29,6 @@ final class MainCollectionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureSubviews()
-        applyStubSnapshot()
     }
 }
 
@@ -52,13 +51,6 @@ private extension MainCollectionViewController {
         UICollectionViewCompositionalLayout { [weak self] section, _ in
             self?.dataSource.snapshot().sectionIdentifiers[section].layout
         }
-    }
-
-    func applyStubSnapshot() {
-        var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
-        snapshot.appendSections([.item])
-        snapshot.appendItems([.item], toSection: .item)
-        dataSource.apply(snapshot)
     }
 }
 
