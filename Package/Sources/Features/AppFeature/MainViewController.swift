@@ -14,7 +14,7 @@ public final class MainViewController: UIViewController {
 
         Task {
             do {
-                let request = SearchRequest(keyword: "")
+                let request = OkashiTypesRequest()
                 let okashi = try await APIClient.shared.call(with: request)
                 print(okashi)
             } catch {
