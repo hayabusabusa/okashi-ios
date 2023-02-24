@@ -23,6 +23,10 @@ public extension APIRequest {
         "https://sysbird.jp/toriko/api"
     }
 
+    var path: String {
+        "/"
+    }
+
     var method: String {
         "GET"
     }
@@ -40,6 +44,8 @@ public extension APIRequest {
             throw APIError.invalidURL
         }
 
-        return URLRequest(url: resolvedURL)
+        var request = URLRequest(url: resolvedURL)
+        request.httpMethod = method
+        return request
     }
 }
