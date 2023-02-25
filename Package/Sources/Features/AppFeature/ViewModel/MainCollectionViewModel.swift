@@ -30,7 +30,7 @@ final class MainCollectionViewModel {
 
     init(apiClient: APIClientProtocol = APIClient.shared) {
         self.apiClient = apiClient
-        self.sectionsSubject = .init([])
+        self.sectionsSubject = .init([(.grid, MainCollectionViewController.Item.skeleton)])
     }
 }
 

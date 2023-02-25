@@ -10,11 +10,11 @@ import Shared
 
 extension MainCollectionViewController {
     enum Section: DiffableSection {
-        case item
+        case grid
 
         var layout: NSCollectionLayoutSection {
             switch self {
-            case .item:
+            case .grid:
                 let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.3), heightDimension: .fractionalHeight(1))
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
                 let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(0.3))

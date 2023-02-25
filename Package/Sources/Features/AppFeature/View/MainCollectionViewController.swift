@@ -17,6 +17,7 @@ final class MainCollectionViewController: UIViewController {
         collectionView.backgroundColor = .systemBackground
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.register(MainCollectionCell.self)
+        collectionView.register(MainCollectionSkeletonCell.self)
         return collectionView
     }()
 

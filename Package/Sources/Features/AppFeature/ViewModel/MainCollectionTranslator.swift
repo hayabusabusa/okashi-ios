@@ -18,6 +18,6 @@ struct MainCollectionTranslator: Translatable {
                                                                                     imageURL: $0.image))
 
         }
-        return [(.item, items)]
+        return [(.grid, items)]
     }
 }
