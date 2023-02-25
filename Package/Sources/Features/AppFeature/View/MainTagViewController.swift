@@ -10,7 +10,10 @@ import UIKit
 final class MainTagViewController: UIViewController {
 
     private lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView()
+        let collectionViewLayout = makeCollectionViewLayout()
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.register(MainTagCell.self)
         return collectionView
     }()
 
@@ -21,9 +24,17 @@ final class MainTagViewController: UIViewController {
         return view
     }()
 
+    private lazy var dataSource: UICollectionViewDiffableDataSource<Section, Item> = {
+        UICollectionViewDiffableDataSource(collectionView: collectionView) { [weak self] collectionView, indexPath, itemIdentifier in
+            guard let self else { return nil }
+            return itemIdentifier.cell(for: collectionView, at: indexPath, with: self)
+        }
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         configureSubviews()
+        applyStubSnapshot()
     }
 }
 
@@ -32,14 +43,35 @@ final class MainTagViewController: UIViewController {
 private extension MainTagViewController {
     func configureSubviews() {
         view.backgroundColor = .systemBackground
+        view.addSubview(collectionView)
         view.addSubview(dividerView)
 
         NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             dividerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             dividerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             dividerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             dividerView.heightAnchor.constraint(equalToConstant: 1)
         ])
+    }
+
+    func makeCollectionViewLayout() -> UICollectionViewCompositionalLayout {
+        UICollectionViewCompositionalLayout { [weak self] section, _ in
+            self?.dataSource.snapshot().sectionIdentifiers[section].layout
+        }
+    }
+
+    func applyStubSnapshot() {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
+        snapshot.appendSections([.grid])
+        snapshot.appendItems([
+            .tag(MainTagCell.Configuration(title: "クッキー", titleLabelColor: .white, backgroundColor: .systemBlue)),
+            .tag(MainTagCell.Configuration(title: "おせんべい", titleLabelColor: .white, backgroundColor: .systemBlue))
+        ])
+        dataSource.apply(snapshot)
     }
 }
 

@@ -50,7 +50,7 @@ private extension MainViewController {
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tagLayoutView.heightAnchor.constraint(equalToConstant: 80),
+            tagLayoutView.heightAnchor.constraint(equalToConstant: 48),
         ])
     }
 
