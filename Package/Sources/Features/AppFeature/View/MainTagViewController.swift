@@ -5,6 +5,7 @@
 //  Created by Shunya Yamada on 2023/02/24.
 //
 
+import Combine
 import UIKit
 
 final class MainTagViewController: UIViewController {
@@ -31,10 +32,17 @@ final class MainTagViewController: UIViewController {
         }
     }()
 
+    private let viewModel: MainTagViewModelable = MainTagViewModel()
+    private var subscriptions = Set<AnyCancellable>()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         configureSubviews()
-        applyStubSnapshot()
+        configureSubscriptions()
+
+        Task {
+            await viewModel.input.viewDidLoad()
+        }
     }
 }
 
@@ -58,19 +66,31 @@ private extension MainTagViewController {
         ])
     }
 
+    func configureSubscriptions() {
+        viewModel.output.sections
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] sections in
+                self?.applySnapshot(with: sections)
+            }
+            .store(in: &subscriptions)
+    }
+
     func makeCollectionViewLayout() -> UICollectionViewCompositionalLayout {
         UICollectionViewCompositionalLayout { [weak self] section, _ in
             self?.dataSource.snapshot().sectionIdentifiers[section].layout
         }
     }
+}
 
-    func applyStubSnapshot() {
+// MARK: - Private
+
+private extension MainTagViewController {
+    func applySnapshot(with sections: [(Section, [Item])]) {
         var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
-        snapshot.appendSections([.grid])
-        snapshot.appendItems([
-            .tag(MainTagCell.Configuration(title: "クッキー", titleLabelColor: .white, backgroundColor: .systemBlue)),
-            .tag(MainTagCell.Configuration(title: "おせんべい", titleLabelColor: .white, backgroundColor: .systemBlue))
-        ])
+        sections.forEach { (section, items) in
+            snapshot.appendSections([section])
+            snapshot.appendItems(items, toSection: section)
+        }
         dataSource.apply(snapshot)
     }
 }
